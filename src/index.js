@@ -1,7 +1,7 @@
 import readline from "node:readline";
 import os from "node:os";
 
-import { readdir } from "node:fs/promises";
+//import { readdir } from "node:fs/promises";
 
 import { MESSAGES } from "./common/messages.js";
 import {
@@ -13,8 +13,9 @@ import { getOSInfo } from "./commands/os.js";
 import { calculateHash } from "./commands/hash.js";
 import { OPERATIONS } from "./common/operations.js";
 import { ls, up, cd } from "./commands/files.js";
+import { doCompress } from "./commands/compress.js";
 
-import path, { dirname, isAbsolute } from "node:path";
+//import path, { dirname, isAbsolute } from "node:path";
 
 const initFileManager = () => {
   const args = process.argv.slice(2);
@@ -110,16 +111,21 @@ const initFileManager = () => {
 
         // Hash calculation
         case OPERATIONS.HASH:
-            if (args.length === 0) {
-                console.error('Invalid input');
-              } else {
-                 await calculateHash(currentDir, args.join(' '));
-              }
+          if (args.length === 0) {
+            console.error("Invalid input");
+          } else {
+            await calculateHash(currentDir, args.join(" "));
+          }
           break;
 
         // Compression operations
         case OPERATIONS.COMPRESS:
-          console.log("Compressing file...");
+            if(args.length !== 2){
+              throw new Error("Invalid input");
+            }
+            const fileName=args[0];
+            const destDir=args[1];
+            await doCompress(currentDir,fileName,destDir);
           break;
 
         case OPERATIONS.DECOMPRESS:

@@ -52,7 +52,7 @@ export const isDirectory = async (path) => {
 
 export const isFile = async (path) => {
   try {
-    const stats = await fs.stat(path);
+    const stats = await stat(path);
     return stats.isFile();
   } catch {
     return false;
