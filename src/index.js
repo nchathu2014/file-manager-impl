@@ -10,6 +10,7 @@ import {
   printCurrentDir,
 } from "./utils/helper.js";
 import { getOSInfo } from "./commands/os.js";
+import { calculateHash } from "./commands/hash.js";
 import { OPERATIONS } from "./common/operations.js";
 import { ls, up, cd } from "./commands/files.js";
 
@@ -109,7 +110,11 @@ const initFileManager = () => {
 
         // Hash calculation
         case OPERATIONS.HASH:
-          console.log("Calculating hash...");
+            if (args.length === 0) {
+                console.error('Invalid input');
+              } else {
+                 await calculateHash(currentDir, args.join(' '));
+              }
           break;
 
         // Compression operations
