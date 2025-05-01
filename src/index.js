@@ -14,7 +14,7 @@ import { calculateHash } from "./commands/hash.js";
 import { OPERATIONS } from "./common/operations.js";
 import { ls, up, cd } from "./commands/navigation.js";
 import { doCompress, doDecompress } from "./commands/compress.js";
-import { doCat, createFile, createDir } from "./commands/files.js";
+import { doCat, createFile, createDir,removeFile, doRename } from "./commands/files.js";
 
 //import path, { dirname, isAbsolute } from "node:path";
 
@@ -87,7 +87,6 @@ const initFileManager = () => {
           break;
 
         case OPERATIONS.MKDIR:
-         
           if (args.length === 0 || args.length > 1) {
             throw new Error("Invalid input");
           }
@@ -95,7 +94,11 @@ const initFileManager = () => {
           break;
 
         case OPERATIONS.RENAME:
-          console.log("Renaming file...");
+            console.log(args);
+          if (args.length !== 2) {
+            throw new Error("Invalid input");
+          }
+          await doRename(currentDir, args[0], args[1]);
           break;
 
         case OPERATIONS.COPY:
@@ -107,7 +110,10 @@ const initFileManager = () => {
           break;
 
         case OPERATIONS.REMOVE:
-          console.log("Removing file...");
+          if (args.length === 0) {
+            throw new Error("Invalid input");
+          } 
+          await removeFile(currentDir, args.join(" "));
           break;
 
         // OS info commands
