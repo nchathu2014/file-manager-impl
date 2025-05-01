@@ -1,10 +1,10 @@
-import { cpus, homedir, userInfo } from "node:os";
+import { cpus, homedir, userInfo,EOL } from "node:os";
 
 export const getOSInfo = (flag) => {
   try {
     switch (flag) {
       case "EOL":
-        const eol = JSON.stringify(os.EOL);
+        const eol = JSON.stringify(EOL);
         console.log(`End-Of-Line: ${eol}`);
         break;
 
@@ -21,7 +21,7 @@ export const getOSInfo = (flag) => {
         });
 
       case "homedir":
-        console.log(`Home directory: ${homedir()}`);
+        console.log(`Home Directory: ${homedir()}`);
         break;
 
       case "username":

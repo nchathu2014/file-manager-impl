@@ -10,7 +10,7 @@ export const createWelcomeMessage = (username) => {
 };
 
 export const printCurrentDir = (currentDir) => {
-  console.log(`You are currently in ${currentDir}`);
+  console.log(`\nYou are currently in ${currentDir}`);
 };
 
 export const checkFlag = (args) => {

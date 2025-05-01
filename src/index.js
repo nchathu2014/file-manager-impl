@@ -1,5 +1,6 @@
 import readline from "node:readline";
 import os from "node:os";
+import { readdir } from "node:fs/promises";
 
 import { MESSAGES } from "./common/messages.js";
 import {
@@ -9,6 +10,9 @@ import {
 } from "./utils/helper.js";
 import { getOSInfo } from "./commands/os.js";
 import { OPERATIONS } from "./common/operations.js";
+import { ls,up } from "./commands/files.js";
+
+import { dirname } from "node:path";
 
 const initFileManager = () => {
   const args = process.argv.slice(2);
@@ -17,31 +21,38 @@ const initFileManager = () => {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
-    prompt: "File Manager 📂 > ",
+    prompt: "File Manager 🗂️ > ",
   });
 
   // Set initial working directory to user's home directory
-  const currentDir = os.homedir();
+  let currentDir = os.homedir();
 
   createWelcomeMessage(username);
+  printCurrentDir(currentDir);
   rl.prompt();
 
-  rl.on("line", (input) => {
+  rl.on("line", async (input) => {
+    const trimmedInput = input.trim();
     //Handle .exit to close the readline interface
-    if (input.trim() === OPERATIONS.EXIT) {
+    if (trimmedInput === OPERATIONS.EXIT) {
       rl.close();
       return;
     }
 
-    const [command, ...args] = input.trim().split(" ");
+    if (trimmedInput === "") {
+      rl.prompt();
+      return;
+    }
+
+    const [command, ...args] = trimmedInput.split(" ");
 
     try {
       const { flag, isValidFlag } = checkFlag(args);
+
       switch (command) {
         // File Navigation Commands
         case OPERATIONS.UP:
-          console.log("Moving up a directory...");
-          printCurrentDir(currentDir);
+          currentDir = up(currentDir);
           break;
 
         case OPERATIONS.CD:
@@ -49,7 +60,7 @@ const initFileManager = () => {
           break;
 
         case OPERATIONS.LS:
-          console.log("Listing files...");
+          await ls(currentDir);
           break;
 
         // File operations
@@ -106,13 +117,14 @@ const initFileManager = () => {
           break;
 
         default:
-          console.error(`Invalid command: ${command}`);
+          console.error("Operation failed!");
           break;
       }
     } catch (error) {
       console.error(`Error: ${error.message}`);
     }
 
+    printCurrentDir(currentDir);
     rl.prompt();
   }).on("close", () => {
     console.log(
