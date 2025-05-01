@@ -14,10 +14,9 @@ import { calculateHash } from "./commands/hash.js";
 import { OPERATIONS } from "./common/operations.js";
 import { ls, up, cd } from "./commands/navigation.js";
 import { doCompress, doDecompress } from "./commands/compress.js";
-import { doCat } from "./commands/files.js";
+import { doCat, createFile, createDir } from "./commands/files.js";
 
 //import path, { dirname, isAbsolute } from "node:path";
-
 
 const initFileManager = () => {
   const args = process.argv.slice(2);
@@ -76,16 +75,23 @@ const initFileManager = () => {
         case OPERATIONS.CAT:
           if (args.length !== 1) {
             throw new Error("Invalid input");
-          }  
+          }
           await doCat(currentDir, args.join(" "));
           break;
 
         case OPERATIONS.ADD:
-          console.log("Adding file...");
+          if (args.length !== 1) {
+            throw new Error("Invalid input");
+          }
+          await createFile(currentDir, args.join(" "));
           break;
 
         case OPERATIONS.MKDIR:
-          console.log("Creating directory...");
+         
+          if (args.length === 0 || args.length > 1) {
+            throw new Error("Invalid input");
+          }
+         await createDir(currentDir,args.join(" "));
           break;
 
         case OPERATIONS.RENAME:
