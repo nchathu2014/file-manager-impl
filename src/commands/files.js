@@ -1,52 +1,37 @@
-import { readdir } from "node:fs/promises";
-import { dirname } from "node:path";
-import { pathExists, isDirectory, resolvePath } from "../utils/helper.js";
+import { resolvePath, pathExists, isFile } from "../utils/helper.js";
+import { createReadStream } from "node:fs";
 
-export const up = (currentDir) => {
-  try {
-    const parentDir = dirname(currentDir);
-    return parentDir;
-  } catch (error) {
-    throw new Error("Error navigating to parent directory: " + error.message);
-  }
-};
+export const doCat = async (currentDir, fileName) => {
+  const resolvedFilePath = resolvePath(currentDir, fileName);
 
-export const ls = async (currentDir) => {
+  //   if (
+  //     !(await pathExists(resolvedFilePath)) ||
+  //     !(await isFile(resolvedFilePath))
+  //   ) {
+  //     throw new Error("File does not exist or is not accessible");
+  //   }
+
+  const readStream = createReadStream(resolvedFilePath, {
+    encoding: "utf-8",
+    flags: "r",
+  });
+
   try {
-    const dirEntries = await readdir(currentDir, {
-      withFileTypes: true,
+    readStream.on("data", (chunk) => {
+      process.stdout.write(chunk);
     });
-    const folders = [];
-    const files = [];
 
-    for (const entry of dirEntries) {
-      if (entry.isDirectory()) {
-        folders.push({ name: entry.name, type: "directory 📂" });
-      } else {
-        files.push({ name: entry.name, type: "file 📄" });
-      }
-    }
+    return new Promise((resolve, reject) => {
+      readStream.on("end", () => {
+        console.log("");
+        resolve();
+      });
 
-    //sorting
-    const sortedFolders = folders.sort((a, b) => a.name.localeCompare(b.name));
-    const sortedFiles = files.sort((a, b) => a.name.localeCompare(b.name));
-
-    const sortedDirEntries = [...sortedFolders, ...sortedFiles];
-    console.log("\n");
-    console.table(sortedDirEntries);
+      readStream.on("error", (err) => {
+        reject(new Error("Failed to read file"));
+      });
+    });
   } catch (error) {
-    throw new Error("Error reading directory: " + error.message);
-  }
-};
-
-export const cd = async (currentDir, targetDir) => {
-  const resolvedPath = resolvePath(currentDir, targetDir);
-  console.log("resolvedPath", resolvedPath);
-
-  if ((await pathExists(resolvedPath)) && (await isDirectory(resolvedPath))) {
-    return resolvedPath;
-  } else {
-    console.error("Directory does not exist or is not accessible");
-    return resolvedPath;
+    throw new Error("Error reading file: ", error);
   }
 };

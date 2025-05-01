@@ -12,10 +12,12 @@ import {
 import { getOSInfo } from "./commands/os.js";
 import { calculateHash } from "./commands/hash.js";
 import { OPERATIONS } from "./common/operations.js";
-import { ls, up, cd } from "./commands/files.js";
+import { ls, up, cd } from "./commands/navigation.js";
 import { doCompress, doDecompress } from "./commands/compress.js";
+import { doCat } from "./commands/files.js";
 
 //import path, { dirname, isAbsolute } from "node:path";
+
 
 const initFileManager = () => {
   const args = process.argv.slice(2);
@@ -72,7 +74,10 @@ const initFileManager = () => {
 
         // File operations
         case OPERATIONS.CAT:
-          console.log("Reading file...");
+          if (args.length !== 1) {
+            throw new Error("Invalid input");
+          }  
+          await doCat(currentDir, args.join(" "));
           break;
 
         case OPERATIONS.ADD:
