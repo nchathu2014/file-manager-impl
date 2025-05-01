@@ -1,9 +1,6 @@
 import readline from "node:readline";
 import os from "node:os";
 
-//import { readdir } from "node:fs/promises";
-
-import { MESSAGES } from "./common/messages.js";
 import {
   checkFlag,
   createWelcomeMessage,
@@ -14,9 +11,14 @@ import { calculateHash } from "./commands/hash.js";
 import { OPERATIONS } from "./common/operations.js";
 import { ls, up, cd } from "./commands/navigation.js";
 import { doCompress, doDecompress } from "./commands/compress.js";
-import { doCat, createFile, createDir,removeFile, doRename } from "./commands/files.js";
-
-//import path, { dirname, isAbsolute } from "node:path";
+import {
+  doCat,
+  createFile,
+  createDir,
+  removeFile,
+  doRename,
+} from "./commands/files.js";
+import { MESSAGES } from "./common/messages.js";
 
 const initFileManager = () => {
   const args = process.argv.slice(2);
@@ -61,10 +63,10 @@ const initFileManager = () => {
 
         case OPERATIONS.CD:
           if (args.length === 0) {
-            console.log("Invalid input");
-          } else {
-            currentDir = await cd(currentDir, args.join(" "));
+            throw new Error("Invalid input");
           }
+          currentDir = await cd(currentDir, args.join(" "));
+
           break;
 
         case OPERATIONS.LS:
@@ -90,11 +92,10 @@ const initFileManager = () => {
           if (args.length === 0 || args.length > 1) {
             throw new Error("Invalid input");
           }
-         await createDir(currentDir,args.join(" "));
+          await createDir(currentDir, args.join(" "));
           break;
 
         case OPERATIONS.RENAME:
-            console.log(args);
           if (args.length !== 2) {
             throw new Error("Invalid input");
           }
@@ -112,7 +113,7 @@ const initFileManager = () => {
         case OPERATIONS.REMOVE:
           if (args.length === 0) {
             throw new Error("Invalid input");
-          } 
+          }
           await removeFile(currentDir, args.join(" "));
           break;
 
@@ -155,7 +156,7 @@ const initFileManager = () => {
           break;
 
         default:
-          console.error("Operation failed!");
+            throw new Error("Operation failed!");
           break;
       }
     } catch (error) {
