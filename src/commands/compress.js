@@ -6,7 +6,7 @@ import {
 } from "../utils/helper.js";
 import { createReadStream, createWriteStream } from "node:fs";
 import { basename, join, dirname } from "node:path";
-import { createBrotliCompress } from "node:zlib";
+import { createBrotliCompress,createBrotliDecompress } from "node:zlib";
 import { pipeline } from "node:stream";
 import { promisify } from "node:util";
 
@@ -55,5 +55,51 @@ export const doCompress = async (currentDir, fileName, destDir) => {
     console.log("File compressed successfully");
   } catch (error) {
     throw new Error("Failed to compress file: " + error.message);
+  }
+};
+
+export const doDecompress = async (currentDir, fileNameGZ, destDirGZ) => {
+  const resolvedFilePath = resolvePath(currentDir, fileNameGZ);
+  const resolvedDestPath = resolvePath(currentDir, destDirGZ);
+
+  try {
+    // Check if source file exists
+    if (
+      !(await pathExists(resolvedFilePath)) ||
+      !(await isFile(resolvedFilePath))
+    ) {
+      throw new Error("Source file does not exist or is not accessible");
+    }
+
+    let finalDestPath;
+    if (await isDirectory(resolvedDestPath)) {
+      const sourceFileName = basename(resolvedFilePath);
+
+      const decompressedFileName = sourceFileName.endsWith(".br")
+        ? sourceFileName.slice(0, -3)
+        : sourceFileName;
+      finalDestPath = join(resolvedDestPath, decompressedFileName);
+    } else {
+      finalDestPath = resolvedDestPath;
+
+      const destDir = dirname(finalDestPath);
+      if (!(await pathExists(destDir)) || !(await isDirectory(destDir))) {
+        throw new Error("Destination directory does not exist");
+      }
+    }
+
+    if (await pathExists(finalDestPath)) {
+      throw new Error("Destination file already exists");
+    }
+
+    const readStream = createReadStream(resolvedFilePath);
+    const brotliStream = createBrotliDecompress();
+    const writeStream = createWriteStream(finalDestPath);
+
+    // Decompress
+    await pipelinePromise(readStream, brotliStream, writeStream);
+    console.log("File decompressed successfully");
+  } catch (error) {
+    throw new Error("Failed to decompress file: " + error.message);
   }
 };

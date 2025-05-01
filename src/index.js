@@ -13,7 +13,7 @@ import { getOSInfo } from "./commands/os.js";
 import { calculateHash } from "./commands/hash.js";
 import { OPERATIONS } from "./common/operations.js";
 import { ls, up, cd } from "./commands/files.js";
-import { doCompress } from "./commands/compress.js";
+import { doCompress, doDecompress } from "./commands/compress.js";
 
 //import path, { dirname, isAbsolute } from "node:path";
 
@@ -120,16 +120,21 @@ const initFileManager = () => {
 
         // Compression operations
         case OPERATIONS.COMPRESS:
-            if(args.length !== 2){
-              throw new Error("Invalid input");
-            }
-            const fileName=args[0];
-            const destDir=args[1];
-            await doCompress(currentDir,fileName,destDir);
+          if (args.length !== 2) {
+            throw new Error("Invalid input");
+          }
+          const fileName = args[0];
+          const destDir = args[1];
+          await doCompress(currentDir, fileName, destDir);
           break;
 
         case OPERATIONS.DECOMPRESS:
-          console.log("Decompressing file...");
+          if (args.length !== 2) {
+            throw new Error("Invalid input");
+          }
+          const fileNameGZ = args[0];
+          const destDirGZ = args[1];
+          await doDecompress(currentDir, fileNameGZ, destDirGZ);
           break;
 
         default:
