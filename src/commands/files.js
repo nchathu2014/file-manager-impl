@@ -1,5 +1,6 @@
 import { readdir } from "node:fs/promises";
 import { dirname } from "node:path";
+import { pathExists, isDirectory, resolvePath } from "../utils/helper.js";
 
 export const up = (currentDir) => {
   try {
@@ -35,5 +36,17 @@ export const ls = async (currentDir) => {
     console.table(sortedDirEntries);
   } catch (error) {
     throw new Error("Error reading directory: " + error.message);
+  }
+};
+
+export const cd = async (currentDir, targetDir) => {
+  const resolvedPath = resolvePath(currentDir, targetDir);
+  console.log("resolvedPath", resolvedPath);
+
+  if ((await pathExists(resolvedPath)) && (await isDirectory(resolvedPath))) {
+    return resolvedPath;
+  } else {
+    console.error("Directory does not exist or is not accessible");
+    return resolvedPath;
   }
 };

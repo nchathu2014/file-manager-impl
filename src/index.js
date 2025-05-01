@@ -1,5 +1,6 @@
 import readline from "node:readline";
 import os from "node:os";
+
 import { readdir } from "node:fs/promises";
 
 import { MESSAGES } from "./common/messages.js";
@@ -10,9 +11,9 @@ import {
 } from "./utils/helper.js";
 import { getOSInfo } from "./commands/os.js";
 import { OPERATIONS } from "./common/operations.js";
-import { ls,up } from "./commands/files.js";
+import { ls, up, cd } from "./commands/files.js";
 
-import { dirname } from "node:path";
+import path, { dirname, isAbsolute } from "node:path";
 
 const initFileManager = () => {
   const args = process.argv.slice(2);
@@ -56,7 +57,11 @@ const initFileManager = () => {
           break;
 
         case OPERATIONS.CD:
-          console.log("Changing directory...");
+          if (args.length === 0) {
+            console.log("Invalid input");
+          } else {
+            currentDir = await cd(currentDir, args.join(" "));
+          }
           break;
 
         case OPERATIONS.LS:

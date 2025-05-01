@@ -19,6 +19,7 @@ export const getOSInfo = (flag) => {
             `CPU ${index + 1}: ${cpu.model} (${clockRateGHz.toFixed(2)} GHz)`
           );
         });
+        break;
 
       case "homedir":
         console.log(`Home Directory: ${homedir()}`);
