@@ -14,6 +14,7 @@ export const OPERATIONS = {
     COMPRESS: "compress",
     DECOMPRESS: "decompress",
     OS:"os",
+    FM_HELP:"fm",
     SIGINT: "SIGINT",
     EXIT:".exit"
 }

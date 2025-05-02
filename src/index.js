@@ -5,7 +5,9 @@ import {
  
   createWelcomeMessage,
   printCurrentDir,
+  
 } from "./utils/helper.js";
+import { printHelp } from "./common/help.js";
 import { getOSInfo } from "./commands/os.js";
 import { calculateHash } from "./commands/hash.js";
 import { OPERATIONS } from "./common/operations.js";
@@ -163,9 +165,13 @@ const initFileManager = () => {
           await doDecompress(currentDir, fileNameGZ, destDirGZ);
           break;
 
-        default:
-          throw new Error("Operation failed!");
+          case OPERATIONS.FM_HELP:
+          printHelp()
           break;
+
+        default:
+        console.log('\nOperation failed!');  
+          console.log('run fm --help for more information'); 
       }
     } catch (error) {
       console.error(`Error: ${error.message}`);
