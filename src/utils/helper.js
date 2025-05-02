@@ -1,6 +1,6 @@
 import { MESSAGES } from "../common/messages.js";
-import {isAbsolute,resolve} from "node:path";
-import { access,stat } from "node:fs/promises";
+import { isAbsolute, resolve } from "node:path";
+import { access, stat } from "node:fs/promises";
 
 export const createWelcomeMessage = (username) => {
   const welcomeText = `${MESSAGES.WELCOME_MSG}, ${username}!`;
@@ -13,16 +13,6 @@ export const createWelcomeMessage = (username) => {
 
 export const printCurrentDir = (currentDir) => {
   console.log(`\nYou are currently in ${currentDir}`);
-};
-
-export const checkFlag = (args) => {
-  const flag = args[0]?.split("--")[1];
-  const isValidFlag = !(args.length === 0 || !args[0].startsWith("--"));
-
-  return {
-    flag,
-    isValidFlag,
-  };
 };
 
 export const resolvePath = (currentDir, pathToResolve) => {

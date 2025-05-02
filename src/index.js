@@ -2,7 +2,7 @@ import readline from "node:readline";
 import os from "node:os";
 
 import {
-  checkFlag,
+ 
   createWelcomeMessage,
   printCurrentDir,
 } from "./utils/helper.js";
@@ -55,7 +55,7 @@ const initFileManager = () => {
     const [command, ...args] = trimmedInput.split(" ");
 
     try {
-      const { flag, isValidFlag } = checkFlag(args);
+     
 
       switch (command) {
         // File Navigation Commands
@@ -127,12 +127,12 @@ const initFileManager = () => {
 
         // OS info commands
         case OPERATIONS.OS:
-          if (!isValidFlag) {
-            console.log("Please provide a valid flag: ", args[0]);
-            return;
+        if (args.length === 0 || !args[0].startsWith('--')) {
+            console.log('Invalid input');
+          } else {
+            const flag = args[0].substring(2);
+            getOSInfo(flag);
           }
-          getOSInfo(flag);
-
           break;
 
         // Hash calculation
