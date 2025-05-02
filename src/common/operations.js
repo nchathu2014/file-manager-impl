@@ -1,6 +1,6 @@
 export const OPERATIONS = {
     UP:'up',
-    COPY: "copy",
+    COPY: "cp",
     CAT: "cat",
     MOVE: "move",
     RENAME: "rn",

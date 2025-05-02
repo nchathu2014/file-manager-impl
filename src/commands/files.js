@@ -1,8 +1,17 @@
 import { createReadStream, createWriteStream } from "node:fs";
 import { mkdir, unlink, rename } from "node:fs/promises";
 import { join } from "node:path";
+import { pipeline } from "node:stream";
+import { promisify } from "node:util";
 
-import { resolvePath, pathExists, isFile } from "../utils/helper.js";
+import {
+  resolvePath,
+  pathExists,
+  isFile,
+  isDirectory,
+} from "../utils/helper.js";
+
+const pipelinePromise = promisify(pipeline);
 
 export const doCat = async (currentDir, fileName) => {
   const resolvedFilePath = resolvePath(currentDir, fileName);
@@ -39,19 +48,24 @@ export const doCat = async (currentDir, fileName) => {
   }
 };
 
+
 export const createFile = async (currentDir, fileName) => {
   const resolvedFilePath = resolvePath(currentDir, fileName);
   const writeStream = createWriteStream(resolvedFilePath, {
     utf8: true,
     flags: "wx",
   });
-
+  
   try {
-    writeStream.write("");
-    writeStream.end();
+    await new Promise((resolve, reject) => {
+      writeStream.on("finish", resolve);
+      writeStream.on("error", reject);
+      writeStream.write("");
+      writeStream.end();
+    });
     console.log("File created successfully");
   } catch (error) {
-    throw new Error("Error creating file: ", error);
+    throw new Error(`Error: ${error.message}`);
   }
 };
 
@@ -96,5 +110,34 @@ export const removeFile = async (currentDir, fileName) => {
     console.log("File removed successfully");
   } catch (error) {
     throw new Error("Error: File does not exist ", error.message);
+  }
+};
+
+export const doCopy = async (currentDir, sourceFileName, destDir) => {
+  const resolvedSourcePath = resolvePath(currentDir, sourceFileName);
+  const resolvedDestPath = resolvePath(currentDir, destDir);
+
+  // Check if source file and destination directory exist
+  const [checkSourceFile, checkDestDir] = await Promise.all([
+    pathExists(resolvedSourcePath) && isFile(resolvedSourcePath),
+    pathExists(resolvedDestPath) && isDirectory(resolvedDestPath),
+  ]);
+
+  if (!checkSourceFile) {
+    throw new Error("Source file does not exist");
+  }
+  if (!checkDestDir) {
+    throw new Error("Destination directory does not exist");
+  }
+
+  const destFilePath = join(resolvedDestPath, sourceFileName);
+
+  try {
+    const readableStream = createReadStream(resolvedSourcePath);
+    const writableStream = createWriteStream(destFilePath);
+    await pipelinePromise(readableStream, writableStream);
+    console.log("File copied successfully");
+  } catch (error) {
+    throw new Error("Error copying file: ", error);
   }
 };

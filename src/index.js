@@ -17,6 +17,7 @@ import {
   createDir,
   removeFile,
   doRename,
+  doCopy,
 } from "./commands/files.js";
 import { MESSAGES } from "./common/messages.js";
 
@@ -103,7 +104,10 @@ const initFileManager = () => {
           break;
 
         case OPERATIONS.COPY:
-          console.log("Copying file...");
+          if (args.length !== 2) {
+            throw new Error("Invalid arguments");
+          }
+          await doCopy(currentDir, args[0], args[1]);
           break;
 
         case OPERATIONS.MOVE:
