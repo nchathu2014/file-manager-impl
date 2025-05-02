@@ -18,6 +18,7 @@ import {
   removeFile,
   doRename,
   doCopy,
+  doMove,
 } from "./commands/files.js";
 import { MESSAGES } from "./common/messages.js";
 
@@ -77,28 +78,28 @@ const initFileManager = () => {
         // File operations
         case OPERATIONS.CAT:
           if (args.length !== 1) {
-            throw new Error("Invalid input");
+            throw new Error("Invalid arguments");
           }
           await doCat(currentDir, args.join(" "));
           break;
 
         case OPERATIONS.ADD:
           if (args.length !== 1) {
-            throw new Error("Invalid input");
+            throw new Error("Invalid arguments");
           }
           await createFile(currentDir, args.join(" "));
           break;
 
         case OPERATIONS.MKDIR:
           if (args.length === 0 || args.length > 1) {
-            throw new Error("Invalid input");
+            throw new Error("Invalid flags");
           }
           await createDir(currentDir, args.join(" "));
           break;
 
         case OPERATIONS.RENAME:
           if (args.length !== 2) {
-            throw new Error("Invalid input");
+            throw new Error("Invalid arguments");
           }
           await doRename(currentDir, args[0], args[1]);
           break;
@@ -111,12 +112,15 @@ const initFileManager = () => {
           break;
 
         case OPERATIONS.MOVE:
-          console.log("Moving file...");
+          if (args.length !== 2) {
+            throw new Error("Invalid arguments");
+          }
+          await doMove(currentDir, args[0], args[1]);
           break;
 
         case OPERATIONS.REMOVE:
           if (args.length === 0) {
-            throw new Error("Invalid input");
+            throw new Error("Invalid arguments");
           }
           await removeFile(currentDir, args.join(" "));
           break;
@@ -134,7 +138,7 @@ const initFileManager = () => {
         // Hash calculation
         case OPERATIONS.HASH:
           if (args.length === 0) {
-            console.error("Invalid input");
+            console.error("Invalid arguments");
           } else {
             await calculateHash(currentDir, args.join(" "));
           }
@@ -143,7 +147,7 @@ const initFileManager = () => {
         // Compression operations
         case OPERATIONS.COMPRESS:
           if (args.length !== 2) {
-            throw new Error("Invalid input");
+            throw new Error("Invalid arguments");
           }
           const fileName = args[0];
           const destDir = args[1];
@@ -152,7 +156,7 @@ const initFileManager = () => {
 
         case OPERATIONS.DECOMPRESS:
           if (args.length !== 2) {
-            throw new Error("Invalid input");
+            throw new Error("Invalid arguments");
           }
           const fileNameGZ = args[0];
           const destDirGZ = args[1];
@@ -160,7 +164,7 @@ const initFileManager = () => {
           break;
 
         default:
-            throw new Error("Operation failed!");
+          throw new Error("Operation failed!");
           break;
       }
     } catch (error) {

@@ -48,14 +48,13 @@ export const doCat = async (currentDir, fileName) => {
   }
 };
 
-
 export const createFile = async (currentDir, fileName) => {
   const resolvedFilePath = resolvePath(currentDir, fileName);
   const writeStream = createWriteStream(resolvedFilePath, {
     utf8: true,
     flags: "wx",
   });
-  
+
   try {
     await new Promise((resolve, reject) => {
       writeStream.on("finish", resolve);
@@ -103,17 +102,24 @@ export const doRename = async (currentDir, currFileName, newFileName) => {
   }
 };
 
-export const removeFile = async (currentDir, fileName) => {
+export const removeFile = async (currentDir, fileName, isShared = false) => {
   const resolvedFilePath = resolvePath(currentDir, fileName);
   try {
     await unlink(resolvedFilePath, { recursive: false });
-    console.log("File removed successfully");
+    if (!isShared) {
+      console.log("File removed successfully");
+    }
   } catch (error) {
     throw new Error("Error: File does not exist ", error.message);
   }
 };
 
-export const doCopy = async (currentDir, sourceFileName, destDir) => {
+export const doCopy = async (
+  currentDir,
+  sourceFileName,
+  destDir,
+  isShared = false
+) => {
   const resolvedSourcePath = resolvePath(currentDir, sourceFileName);
   const resolvedDestPath = resolvePath(currentDir, destDir);
 
@@ -136,8 +142,22 @@ export const doCopy = async (currentDir, sourceFileName, destDir) => {
     const readableStream = createReadStream(resolvedSourcePath);
     const writableStream = createWriteStream(destFilePath);
     await pipelinePromise(readableStream, writableStream);
-    console.log("File copied successfully");
+    if (!isShared) {
+      console.log("File copied successfully");
+    }
   } catch (error) {
     throw new Error("Error copying file: ", error);
+  }
+};
+
+export const doMove = async (currentDir, sourceFileName, destDir) => {
+  try {
+    //Since move is same as copy
+    await doCopy(currentDir, sourceFileName, destDir, true);
+    // After copying, remove the source file
+    await removeFile(currentDir, sourceFileName, true);
+    console.log("File moved successfully!");
+  } catch (error) {
+    throw new Error("Error moving file: ", error);
   }
 };

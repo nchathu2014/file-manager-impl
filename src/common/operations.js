@@ -2,7 +2,7 @@ export const OPERATIONS = {
     UP:'up',
     COPY: "cp",
     CAT: "cat",
-    MOVE: "move",
+    MOVE: "mv",
     RENAME: "rn",
     REMOVE: "rm",
     MKDIR: "mkdir",
