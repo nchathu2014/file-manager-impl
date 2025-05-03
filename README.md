@@ -10,31 +10,50 @@
 - If you want to see command help run fm --help on the console (additional development)
 <img width="1054" alt="image" src="https://github.com/user-attachments/assets/f58de28c-e45e-4ab5-b5d5-76d1bb6011f9" />
 
+- help run fm --version or fm -v
+- clear, command to clear the console
 
+# Tested following scenarios
 
+* General
+    * +6 Application accepts username and prints proper message ✅ 
+    * +10 Application exits if user pressed ctrl+c or sent .exit command and proper message is printed ✅ 
 
+* Operations fail
+    * +20 Attempts to perform an operation on a non-existent file or work on a non-existent path result in the operation fail ✅
+    * +10 Operation fail doesn't crash application ✅
 
+* Navigation & working directory operations implemented properly
+    * +10 Go upper from current directory ✅
+    * +10 Go to dedicated folder from current directory ✅
+    * +20 List all files and folders in current directory ✅
 
-# Help Information:
+* Basic operations with files implemented properly
+    * +10 Read file and print it's content in console ✅
+    * +5 Create empty file ✅
+    * +5 Create new directory ✅
+    * +10 Rename file ✅
+    * +10 Copy file ✅
+    * +10 Move file ✅
+    * +10 Delete file ✅
 
-- up - Go upper from current directory;
-- cd - Go to dedicated folder from current directory;
-- ls - Print in console list of all files and folders in current directory.
+* Operating system info (prints following information in console) implemented properly
+    * +6 Get EOL (default system End-Of-Line) ✅
+    * +10 Get host machine CPUs info (overall amount of CPUS plus model and clock rate (in GHz) for each of them) ✅
+    * +6 Get home directory ✅
+    * +6 Get current system user name (Do not confuse with the username that is set when the application starts) ✅
+    * +6 Get CPU architecture for which Node.js binary has compiled ✅
 
-- cat path_to_file - Read file and print it's content in console;
-- add new_file_name - Create empty file in current working directory;
-- rn path_to_file new_filename - Rename file;
-- cp path_to_file path_to_new_directory - Copy file;
-- mv path_to_file path_to_new_directory - Move file;
-- rm path_to_file - Delete file;
+* Hash calculation implemented properly
+    * +20 Calculate hash for file ✅
 
-- os --EOL - Get EOL (default system End-Of-Line) and print it to console;
-- os --cpus - Get host machine CPUs info and print it to console;
-- os --homedir - Get home directory and print it to console;
-- os --username - Get current system user name and print it to console;
-- os --architecture - Get CPU architecture for which Node.js binary has compiled and print it to console;
+* compress and decompress operations
+    * +20 Compress file (using Brotli algorithm) ✅
+    * +20 Decompress file (using Brotli algorithm) ✅
+ 
+* Advanced Scope
+    * +30 All operations marked as to be implemented using certain streams should be performed using Streams API ✅
+    * +20 No synchronous Node.js API with asynchronous analogues is used (e.g. not used readFileSync instead of readFile) ✅
+    * +20 Codebase is written in ESM modules instead of CommonJS ✅
+    * +20 Codebase is separated (at least 7 modules) ✅
 
-- hash path_to_file - Calculate hash for file and print it into console;
-
-- compress path_to_file path_to_destination - Compress file;
-- decompress path_to_file path_to_destination - Decompress file;
