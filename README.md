@@ -10,8 +10,8 @@
 - If you want to see command help run fm --help on the console (additional development)
 <img width="1054" alt="image" src="https://github.com/user-attachments/assets/f58de28c-e45e-4ab5-b5d5-76d1bb6011f9" />
 
-- help run fm --version or fm -v
-- clear, command to clear the console
+- help run fm --version or fm -v (additional development)
+- clear, command to clear the console (additional development)
 
 # Tested following scenarios
 
@@ -55,5 +55,8 @@
     * +30 All operations marked as to be implemented using certain streams should be performed using Streams API ✅
     * +20 No synchronous Node.js API with asynchronous analogues is used (e.g. not used readFileSync instead of readFile) ✅
     * +20 Codebase is written in ESM modules instead of CommonJS ✅
-    * +20 Codebase is separated (at least 7 modules) ✅
+    * +20 Codebase is separated (at least 7 modules) ✅  (more than 7 modules)
+
+      <img width="403" alt="image" src="https://github.com/user-attachments/assets/031df18b-3f45-4062-aefc-3469a9996c16" />
+
 
