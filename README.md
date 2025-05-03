@@ -8,8 +8,10 @@
 <img width="349" alt="image" src="https://github.com/user-attachments/assets/bedb8724-0960-4879-a3c9-f1588c43d14f" />
 
 
-- If you want to see command help run fm --help on the console (additional development)
-<img width="1041" alt="image" src="https://github.com/user-attachments/assets/0ff31d3e-8839-4a6f-9888-a8b5c4e3bfa1" />
+- If you want to see command help, print "fm --help" on the console (additional development)
+
+<img width="1047" alt="image" src="https://github.com/user-attachments/assets/25b0041d-b0f6-4fea-8b76-bcd73e3761be" />
+
 
 - help run fm --version or fm -v (additional development)
 - clear, command to clear the console (additional development)
