@@ -15,7 +15,9 @@ const helpInfo = [
     {'Command': 'os --architecture', 'Description': 'Get CPU architecture for which Node.js binary has compiled and print it to console'},
     {'Command': 'hash path_to_file', 'Description': 'Calculate hash for file and print it into console'},
     {'Command': 'compress path_to_file path_to_destination', 'Description': 'Compress file'},
-    {'Command': 'decompress path_to_file path_to_destination', 'Description': 'Decompress file'}
+    {'Command': 'decompress path_to_file path_to_destination', 'Description': 'Decompress file'},
+    {'Command': '.exit', 'Description': 'Exit from the program'},
+    {'Command': 'cmd + d (mac) or Ctrl + d (windows)', 'Description': 'Exit from the program'},
 ];
 
 export const printHelp = () => {
