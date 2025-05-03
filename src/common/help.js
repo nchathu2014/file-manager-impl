@@ -24,3 +24,4 @@ export const printHelp = () => {
     console.log('\nHelp Information:');
     console.table(helpInfo);
 };
+

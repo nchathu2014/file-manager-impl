@@ -1,18 +1,19 @@
-import { MESSAGES } from "../common/messages.js";
+import { MESSAGES,ERRORS } from "../common/messages.js";
 import { isAbsolute, resolve } from "node:path";
 import { access, stat } from "node:fs/promises";
+import { consoleColors } from "./colors.js";
 
 export const createWelcomeMessage = (username) => {
   const welcomeText = `${MESSAGES.WELCOME_MSG}, ${username}!`;
   const border = "*".repeat(welcomeText.length + 4);
 
-  console.log(border);
-  console.log(`* ${welcomeText} *`);
-  console.log(border);
+  console.log(consoleColors.yellow, border);
+  console.log(consoleColors.yellow, `* ${welcomeText} *`);
+  console.log(consoleColors.yellow, border);
 };
 
 export const printCurrentDir = (currentDir) => {
-  console.log(`\nYou are currently in ${currentDir}`);
+  console.log(consoleColors.gray, `\nYou are currently in ${currentDir}`);
 };
 
 export const resolvePath = (currentDir, pathToResolve) => {
@@ -49,4 +50,7 @@ export const isFile = async (path) => {
   }
 };
 
-
+export const printInvalidOpAndHelp = () => {
+  console.log(consoleColors.red, `\n${ERRORS.OPERATION_FAILED}`);
+  console.log(consoleColors.yellow, MESSAGES.HELP);
+};

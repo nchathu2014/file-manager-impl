@@ -1,13 +1,14 @@
 import { readdir } from "node:fs/promises";
 import { dirname } from "node:path";
 import { pathExists, isDirectory, resolvePath } from "../utils/helper.js";
+import { consoleColors } from "../utils/colors.js";
 
 export const up = (currentDir) => {
   try {
     const parentDir = dirname(currentDir);
     return parentDir;
   } catch (error) {
-    throw new Error("Error navigating to parent directory: " + error.message);
+    console.error(consoleColors.red, "Error navigating to parent directory:", error.message);
   }
 };
 
@@ -35,19 +36,16 @@ export const ls = async (currentDir) => {
     console.log("\n");
     console.table(sortedDirEntries);
   } catch (error) {
-    throw new Error("Error reading directory: " + error.message);
+    console.error(consoleColors.red, "Error reading directory:", error.message);
   }
 };
 
 export const cd = async (currentDir, targetDir) => {
   const resolvedPath = resolvePath(currentDir, targetDir);
-  console.log("resolvedPath", resolvedPath);
 
   if ((await pathExists(resolvedPath)) && (await isDirectory(resolvedPath))) {
     return resolvedPath;
   } else {
-    throw new Error("Directory does not exist or is not accessible");
-    console.error("Directory does not exist or is not accessible");
-   // return resolvedPath;
+    console.error(consoleColors.red, "Directory does not exist or is not accessible");
   }
 };

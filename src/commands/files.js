@@ -10,19 +10,12 @@ import {
   isFile,
   isDirectory,
 } from "../utils/helper.js";
+import { consoleColors } from "../utils/colors.js";
 
 const pipelinePromise = promisify(pipeline);
 
 export const doCat = async (currentDir, fileName) => {
   const resolvedFilePath = resolvePath(currentDir, fileName);
-
-  //   if (
-  //     !(await pathExists(resolvedFilePath)) ||
-  //     !(await isFile(resolvedFilePath))
-  //   ) {
-  //     throw new Error("File does not exist or is not accessible");
-  //   }
-
   const readStream = createReadStream(resolvedFilePath, {
     encoding: "utf-8",
     flags: "r",
@@ -59,10 +52,10 @@ export const createFile = async (currentDir, fileName) => {
     await new Promise((resolve, reject) => {
       writeStream.on("finish", resolve);
       writeStream.on("error", reject);
-      writeStream.write("");
+      writeStream.write(""); // create an empty file
       writeStream.end();
     });
-    console.log("File created successfully");
+    console.log(consoleColors.green, "File created successfully ✅");
   } catch (error) {
     throw new Error(`Error: ${error.message}`);
   }
@@ -88,17 +81,17 @@ export const doRename = async (currentDir, currFileName, newFileName) => {
   ]);
 
   if (!currPathCheck) {
-    throw new Error("Source file does not exist");
+    console.log(consoleColors.red, "Source file does not exist");
   }
   if (newPathCheck) {
-    throw new Error("Destination file already exists");
+    console.log(consoleColors.red, "Destination file already exists");
   }
 
   try {
     await rename(resolvedCurrPath, resolvedNewPath);
-    console.log("File renamed successfully");
+    console.log(consoleColors.green, "File renamed successfully ✅");
   } catch (error) {
-    throw new Error("Error renaming file: ", error);
+    throw new Error("Error renaming file: ", error.message);
   }
 };
 
@@ -107,7 +100,7 @@ export const removeFile = async (currentDir, fileName, isShared = false) => {
   try {
     await unlink(resolvedFilePath, { recursive: false });
     if (!isShared) {
-      console.log("File removed successfully");
+      console.log(consoleColors.green, "File removed successfully ✅");
     }
   } catch (error) {
     throw new Error("Error: File does not exist ", error.message);
@@ -130,10 +123,10 @@ export const doCopy = async (
   ]);
 
   if (!checkSourceFile) {
-    throw new Error("Source file does not exist");
+    console.log(consoleColors.red, "Source file does not exist");
   }
   if (!checkDestDir) {
-    throw new Error("Destination directory does not exist");
+    console.log(consoleColors.red, "Destination directory does not exist");
   }
 
   const destFilePath = join(resolvedDestPath, sourceFileName);
@@ -143,10 +136,10 @@ export const doCopy = async (
     const writableStream = createWriteStream(destFilePath);
     await pipelinePromise(readableStream, writableStream);
     if (!isShared) {
-      console.log("File copied successfully");
+      console.log(consoleColors.green, "File copied successfully ✅");
     }
   } catch (error) {
-    throw new Error("Error copying file: ", error);
+    throw new Error("Error copying file: ", error.message);
   }
 };
 
@@ -156,8 +149,8 @@ export const doMove = async (currentDir, sourceFileName, destDir) => {
     await doCopy(currentDir, sourceFileName, destDir, true);
     // After copying, remove the source file
     await removeFile(currentDir, sourceFileName, true);
-    console.log("File moved successfully!");
+    console.log(consoleColors.green, "File moved successfully ✅");
   } catch (error) {
-    throw new Error("Error moving file: ", error);
+    throw new Error("Error moving file: ", error.message);
   }
 };
