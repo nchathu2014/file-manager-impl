@@ -4,10 +4,12 @@
 - npm run start -- --username=<YOUR_USER_NAME>
 - If you are using yarn, yarn start --username=<YOUR_USER_NAME>
 - If you install everyting correctly, you will see
-<img width="394" alt="image" src="https://github.com/user-attachments/assets/df762ea2-0efa-4485-90ce-ee2813cf16c2" />
+<img width="349" alt="image" src="https://github.com/user-attachments/assets/bedb8724-0960-4879-a3c9-f1588c43d14f" />
+
 
 - If you want to see command help run fm --help on the console (additional development)
-<img width="1045" alt="image" src="https://github.com/user-attachments/assets/e03ab504-3b08-4b12-90f9-ed04752cc114" />
+<img width="1054" alt="image" src="https://github.com/user-attachments/assets/f58de28c-e45e-4ab5-b5d5-76d1bb6011f9" />
+
 
 
 
