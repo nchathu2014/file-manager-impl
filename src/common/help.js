@@ -1,3 +1,4 @@
+
 const helpInfo = [
     {'Command': 'up', 'Description': 'Go upper from current directory'},
     {'Command': 'cd', 'Description': 'Go to dedicated folder from current directory'},
@@ -16,6 +17,9 @@ const helpInfo = [
     {'Command': 'hash path_to_file', 'Description': 'Calculate hash for file and print it into console'},
     {'Command': 'compress path_to_file path_to_destination', 'Description': 'Compress file'},
     {'Command': 'decompress path_to_file path_to_destination', 'Description': 'Decompress file'},
+    {'Command': 'clear', 'Description': 'Clear console screen **[New Feature]'},
+    {'Command': 'fm --help', 'Description': 'See the command list **[New Feature]'},
+    {'Command': 'fm --version, fm -v', 'Description': 'See the File Manager vsersion **[New Feature]'},
     {'Command': '.exit', 'Description': 'Exit from the program'},
     {'Command': 'cmd + d (mac) or Ctrl + d (windows)', 'Description': 'Exit from the program'},
 ];

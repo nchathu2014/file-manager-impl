@@ -5,8 +5,9 @@ import {
   createWelcomeMessage,
   printCurrentDir,
   printInvalidOpAndHelp,
+  clearConsole,
 } from "./utils/helper.js";
-import { printHelp } from "./common/help.js";
+import { getCommonInfo } from "./commands/common.js";
 import { getOSInfo } from "./commands/os.js";
 import { calculateHash } from "./commands/hash.js";
 import { OPERATIONS } from "./common/operations.js";
@@ -21,7 +22,7 @@ import {
   doCopy,
   doMove,
 } from "./commands/files.js";
-import { MESSAGES, ERRORS } from "./common/messages.js";
+import { MESSAGES } from "./common/messages.js";
 import { consoleColors } from "./utils/colors.js";
 
 const initFileManager = () => {
@@ -79,7 +80,7 @@ const initFileManager = () => {
         // File Commands
         case OPERATIONS.CAT:
           if (args.length !== 1) {
-           printInvalidOpAndHelp();
+            printInvalidOpAndHelp();
             break;
           }
           await doCat(currentDir, args.join(" "));
@@ -94,7 +95,7 @@ const initFileManager = () => {
           break;
 
         case OPERATIONS.MKDIR:
-          if (args.length === 0 || args.length > 1) {
+          if (args.length === 0) {
             printInvalidOpAndHelp();
             break;
           }
@@ -127,7 +128,7 @@ const initFileManager = () => {
 
         case OPERATIONS.REMOVE:
           if (args.length === 0) {
-           printInvalidOpAndHelp();
+            printInvalidOpAndHelp();
             break;
           }
           await removeFile(currentDir, args.join(" "));
@@ -170,11 +171,16 @@ const initFileManager = () => {
             printInvalidOpAndHelp();
             break;
           }
-          await doDecompress(currentDir, args[0],  args[1]);
+          await doDecompress(currentDir, args[0], args[1]);
           break;
 
-        case OPERATIONS.FM_HELP:
-          printHelp();
+        case OPERATIONS.FILE_MANAGER:
+          getCommonInfo(args[0]);
+
+          break;
+
+        case OPERATIONS.CLEAR:
+          clearConsole()
           break;
 
         default:

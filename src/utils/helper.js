@@ -2,6 +2,7 @@ import { MESSAGES,ERRORS } from "../common/messages.js";
 import { isAbsolute, resolve } from "node:path";
 import { access, stat } from "node:fs/promises";
 import { consoleColors } from "./colors.js";
+import { clear } from "node:console";
 
 export const createWelcomeMessage = (username) => {
   const welcomeText = `${MESSAGES.WELCOME_MSG}, ${username}!`;
@@ -54,3 +55,6 @@ export const printInvalidOpAndHelp = () => {
   console.log(consoleColors.red, `\n${ERRORS.OPERATION_FAILED}`);
   console.log(consoleColors.yellow, MESSAGES.HELP);
 };
+
+
+export const clearConsole = () => console.clear();

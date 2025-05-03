@@ -65,7 +65,7 @@ export const createDir = async (currentDir, dirName) => {
   const resolvedDirPath = join(currentDir, dirName);
   try {
     await mkdir(resolvedDirPath, { recursive: false });
-    console.log("Directory created successfully");
+    console.log(consoleColors.green,"Directory created successfully ✅");
   } catch (error) {
     throw new Error("Error: File already exist ", error.message);
   }
