@@ -1,4 +1,12 @@
-# file-manager-impl
+# File Manager 🗂️
+- Use 22.x.x version (22.15.0 or upper) of Node.js
+- Please checkout to the 'development' branch
+- npm run start -- --username=<YOUR_USER_NAME>
+- If you are using yarn, yarn start --username=<YOUR_USER_NAME>
+- If you install everyting correctly, you will see
+  ![image](https://github.com/user-attachments/assets/974be8ab-2663-430a-bdf8-37fd3d652211)
+
+
 
 # Help Information:
 
